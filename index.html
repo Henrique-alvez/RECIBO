@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Recibo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header no-print">
+            <h1>Gerador de Recibo</h1>
+            <p>Preencha os dados abaixo para gerar o seu recibo profissional.</p>
+            <button id="printBtn" class="btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                Imprimir / PDF
+            </button>
+        </header>
+
+        <main class="main-content">
+            <div class="form-panel no-print">
+                <form id="receiptForm">
+                    <section class="form-section">
+                        <h2>Dados do Emissor</h2>
+                        <div class="input-group">
+                            <label for="companyName">Nome da Empresa</label>
+                            <input type="text" id="companyName" value="SISTEMA TOP ERP">
+                        </div>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="companyDoc">CNPJ/CPF</label>
+                                <input type="text" id="companyDoc" value="45.804.251/0001-67">
+                            </div>
+                            <div class="input-group">
+                                <label for="companyPhone">Telefone</label>
+                                <input type="text" id="companyPhone" value="(35)99822-5949">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Dados do Recibo</h2>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="receiptNumber">Número</label>
+                                <input type="text" id="receiptNumber" value="1003">
+                            </div>
+                            <div class="input-group">
+                                <label for="receiptDate">Data</label>
+                                <input type="text" id="receiptDate" value="10/08/2026">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Dados do Cliente</h2>
+                        <div class="input-group">
+                            <label for="clientName">Nome</label>
+                            <input type="text" id="clientName" value="Pdverde soluções promocionais Ltda">
+                        </div>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="clientDoc">CPF/CNPJ</label>
+                                <input type="text" id="clientDoc" value="20.896.701/0001-63">
+                            </div>
+                            <div class="input-group">
+                                <label for="clientContact">Contato (Email)</label>
+                                <input type="text" id="clientContact" value="joao.silva@email.com">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Itens do Pedido</h2>
+                        <div class="input-group">
+                            <label for="itemDesc">Descrição</label>
+                            <input type="text" id="itemDesc" value="LOCAÇÃO DE SISTEMA DE GESTAO">
+                        </div>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="itemQty">Qtd</label>
+                                <input type="number" id="itemQty" value="1" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="itemPrice">Valor Unitário (R$)</label>
+                                <input type="number" id="itemPrice" value="690.00" step="0.01">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="form-section">
+                        <h2>Pagamento</h2>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="payMethod">Forma</label>
+                                <input type="text" id="payMethod" value="Pix">
+                            </div>
+                            <div class="input-group">
+                                <label for="payStatus">Status</label>
+                                <select id="payStatus">
+                                    <option value="Pago">Pago</option>
+                                    <option value="Pendente">Pendente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group">
+                                <label for="discount">Desconto (R$)</label>
+                                <input type="number" id="discount" value="0.00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="addition">Acréscimo (R$)</label>
+                                <input type="number" id="addition" value="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+
+            <div class="preview-panel">
+                <div class="receipt-wrapper" id="receiptWrapper">
+                    <!-- The actual receipt layout -->
+                    <div class="receipt">
+                        <div class="receipt-header">
+                            <div class="company-info">
+                                <h1 class="company-name" id="outCompanyName">SISTEMA TOP ERP</h1>
+                                <p>CNPJ/CPF: <span id="outCompanyDoc">45.804.251/0001-67</span></p>
+                                <p>Telefone: <span id="outCompanyPhone">(35)99822-5949</span></p>
+                            </div>
+                            <div class="receipt-meta">
+                                <div class="receipt-title-box">
+                                    RECIBO DE<br>PRESTAÇÃO DE<br>SERVIÇOS
+                                </div>
+                                <div class="meta-details">
+                                    <p>NÚMERO: <strong>#<span id="outReceiptNumber">1003</span></strong></p>
+                                    <p>DATA: <strong><span id="outReceiptDate">10/08/2026</span></strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-title">DADOS DO CLIENTE / COMPRADOR</div>
+                        <div class="client-info">
+                            <div class="client-row">
+                                <p><strong>NOME:</strong> <span id="outClientName">Pdverde soluções promocionais Ltda</span></p>
+                            </div>
+                            <div class="client-row split">
+                                <p><strong>CPF/CNPJ:</strong> <span id="outClientDoc">20.896.701/0001-63</span></p>
+                                <p><strong>CONTATO:</strong> <span id="outClientContact">joao.silva@email.com</span></p>
+                            </div>
+                        </div>
+
+                        <div class="section-title">ITENS DO PEDIDO</div>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-desc">DESCRIÇÃO</th>
+                                    <th class="col-qty">QTD</th>
+                                    <th class="col-unit">UNITÁRIO</th>
+                                    <th class="col-total">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-desc" id="outItemDesc">LOCAÇÃO DE SISTEMA DE GESTAO</td>
+                                    <td class="col-qty" id="outItemQty">1</td>
+                                    <td class="col-unit" id="outItemPrice">R$ 690,00</td>
+                                    <td class="col-total" id="outItemTotal">R$ 690,00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="receipt-footer">
+                            <div class="payment-info">
+                                <div class="section-title" style="margin-top: 0; padding-top: 0; border: none; font-size: 11px;">PAGAMENTO</div>
+                                <div class="pay-row mt">
+                                    <span>Forma:</span>
+                                    <span class="pay-method-val" id="outPayMethod">Pix</span>
+                                </div>
+                                <div class="pay-row">
+                                    <span>Status:</span>
+                                    <span class="pay-status-badge" id="outPayStatus">Pago</span>
+                                </div>
+                            </div>
+                            <div class="summary-info">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="outSubtotal">R$ 690,00</span>
+                                </div>
+                                <div class="summary-row text-red">
+                                    <span>Desconto:</span>
+                                    <span id="outDiscount">- R$ 0,00</span>
+                                </div>
+                                <div class="summary-row text-green">
+                                    <span>Acréscimos:</span>
+                                    <span id="outAddition">+ R$ 0,00</span>
+                                </div>
+                                <div class="summary-divider"></div>
+                                <div class="summary-row total">
+                                    <span>Total Geral:</span>
+                                    <span id="outTotal">R$ 690,00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
